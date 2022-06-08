@@ -1,0 +1,232 @@
+/* *****************************************************************************
+ *  Name: Jing Chen
+ *  Date: 06/07/2022
+ *  Description:
+ **************************************************************************** */
+
+import edu.princeton.cs.algs4.StdOut;
+
+import java.util.Iterator;
+
+public class DequeFirstTry<Item> implements Iterable<Item> {
+    private Item[] arr;
+    private int count;
+    private int arrSize;
+    private int firstIndex;
+    private int lastIndex;
+
+    // construct an empty deque
+    public DequeFirstTry() {
+        arr = (Item[]) new Object[1];
+        // 1 / 3 = 0
+        // this will not trigger the resizing
+        arrSize = 0;
+        // first index is a solid pointer
+        // last index is an empty pointer
+        firstIndex = 0;
+        lastIndex = 0;
+        count = 0;
+    }
+
+    // is the deque empty?
+    public boolean isEmpty() {
+        return count == 0;
+    }
+
+    // return the number of items on the deque
+    public int size() {
+        return count;
+    }
+
+    // add the item to the front
+    public void addFirst(Item item) {
+        // corner case
+        if (item == null) {
+            throw new IllegalArgumentException();
+        }
+        // special case, two pointers coincident
+        // we need to follow the rule of pointer solidness
+        if (count == 0) {
+            // we need to make sure first index points to valid slot
+            resizeArray();
+            // first index is solid pointer
+            arr[firstIndex] = item;
+            // last index is pointing to next slot (empty pointer)
+            lastIndex++;
+            // increase the count
+            count++;
+            return;
+        }
+        // first index contains object, if it is zero. there is no more slot
+        if (firstIndex == 0) {
+            resizeArray();
+        }
+        // first is a solid pointer, we move to next slot first
+        firstIndex--;
+        // assign item
+        arr[firstIndex] = item;
+        // increase the count
+        count++;
+    }
+
+    // add the item to the back
+    public void addLast(Item item) {
+        // corner case
+        if (item == null) {
+            throw new IllegalArgumentException();
+        }
+        // special case
+        // last index is empty pointer
+        if (count == 0) {
+            // need to make sure first index is pointing to valid slot
+            resizeArray();
+            arr[firstIndex] = item;
+            // last index is pointing to next slot
+            lastIndex++;
+            count++;
+            return;
+        }
+        // last available slot is arrSize - 1
+        if (lastIndex == arrSize) {
+            // no more slots
+            resizeArray();
+        }
+        // last pointer is an empty point. we assign the item first
+        arr[lastIndex] = item;
+        // then move to next empty space
+        lastIndex++;
+        count++;
+    }
+
+    // remove and return the item from the front
+    public Item removeFirst() {
+        if (count == 0) {
+            throw new java.util.NoSuchElementException();
+        }
+        if (count < arrSize / 3) {
+            resizeArray();
+        }
+        // we get the value first, first index pointer is solid
+        Item val = arr[firstIndex];
+        // to avoid loitering, we set the array value to null
+        arr[firstIndex] = null;
+        // advance the pointer
+        firstIndex++;
+        // return the value
+        count--;
+        return val;
+    }
+
+    // remove and return the item from the back
+    public Item removeLast() {
+        if (count == 0) {
+            throw new java.util.NoSuchElementException();
+        }
+        if (count < arrSize / 3) {
+            resizeArray();
+        }
+        // we get the value first.
+        // last pointer is empty, we need to first shift back. then get the value
+        Item val = arr[--lastIndex];
+
+        // to avoid loitering, we set the array to null
+        arr[lastIndex] = null;
+
+        count--;
+        // return the value
+        return val;
+    }
+
+    // return an iterator over items in order from front to back
+    public Iterator<Item> iterator() {
+        return new MyIterator();
+    }
+
+    // private class to implement the iterator
+    // inner class is like a private method, it can be used with
+    // any instance of outer instance object
+    private class MyIterator implements Iterator<Item> {
+
+        private int indexer = firstIndex;
+
+        public boolean hasNext() {
+            return indexer != lastIndex;
+        }
+
+        public Item next() {
+            if (!hasNext()) {
+                throw new java.util.NoSuchElementException();
+            }
+            return arr[indexer++];
+        }
+
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
+    }
+
+    private void resizeArray() {
+        // update the size of the new arr
+        // use plus 1 to cater for empty list
+        arrSize = count * 3 + 1;
+        Item[] newArr = (Item[]) new Object[arrSize];
+        // copy the array to middle segment of the new array
+        for (int i = 0; i < count; i++) {
+            newArr[count + i] = arr[firstIndex + i];
+        }
+        // reassign the index
+        firstIndex = count;
+        // last index pointer is empty pointer
+        lastIndex = firstIndex + count;
+        // assign the reference
+        arr = newArr;
+    }
+
+    public static void main(String[] args) {
+        Deque<Integer> doubleQ = new Deque<>();
+        StdOut.println("testing empty : " + doubleQ.isEmpty());
+        StdOut.print("addFirst : size : ");
+        // test add first + remove last
+        for (int i = 0; i < 10; i++) {
+            doubleQ.addFirst(i);
+            StdOut.print(doubleQ.size() + " ");
+        }
+        StdOut.println("\ntesting empty : " + doubleQ.isEmpty());
+        StdOut.print("removeLast : item : ");
+        for (int i = 0; i < 10; i++) {
+            StdOut.print(doubleQ.removeLast() + " ");
+        }
+        StdOut.println("\ntesting empty : " + doubleQ.isEmpty());
+        // test add last + remove first
+        StdOut.print("addLast : size : ");
+        for (int i = 0; i < 10; i++) {
+            doubleQ.addLast(i);
+            StdOut.print(doubleQ.size() + " ");
+        }
+        StdOut.println("\ntesting empty : " + doubleQ.isEmpty());
+        StdOut.print("removeFirst : item : ");
+        for (int i = 0; i < 10; i++) {
+            StdOut.print(doubleQ.removeFirst() + " ");
+        }
+        StdOut.println("\ntesting empty : " + doubleQ.isEmpty());
+
+        StdOut.print("addFirst + addLast : size : ");
+        // test add first + remove last
+        for (int i = 0; i < 10; i++) {
+            doubleQ.addFirst(i);
+            doubleQ.addLast(i);
+            StdOut.print(doubleQ.size() + " ");
+        }
+        StdOut.print("\ntesting iterator : ");
+        for (int i : doubleQ) {
+            StdOut.print(i + " ");
+        }
+
+        // auto-grader failed test
+        StdOut.println();
+        Deque<Integer> dq = new Deque<>();
+        dq.addFirst(0);
+        dq.removeFirst();
+        dq.addFirst(0);
+    }
+}

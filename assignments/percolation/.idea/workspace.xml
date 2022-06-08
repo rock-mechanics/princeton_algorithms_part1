@@ -66,6 +66,7 @@
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
+    <option name="sortByType" value="true" />
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
@@ -78,7 +79,7 @@
     <property name="project.structure.side.proportion" value="0.0" />
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
-  <component name="RunManager" selected="Application.HelloGoodbye">
+  <component name="RunManager" selected="Application.PercolationStats">
     <configuration name="HelloGoodbye" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="HelloGoodbye" />
       <module name="Algorithms, Part I" />
@@ -94,6 +95,16 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="Percolation" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Percolation" />
+      <module name="Algorithms, Part I" />
+      <method v="2" />
+    </configuration>
+    <configuration name="PercolationStats" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="PercolationStats" />
+      <module name="Algorithms, Part I" />
+      <method v="2" />
+    </configuration>
     <configuration name="RandomWord" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="RandomWord" />
       <module name="Algorithms, Part I" />
@@ -105,6 +116,8 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.PercolationStats" />
+        <item itemvalue="Application.Percolation" />
         <item itemvalue="Application.HelloGoodbye" />
         <item itemvalue="Application.HelloWorld" />
       </list>
